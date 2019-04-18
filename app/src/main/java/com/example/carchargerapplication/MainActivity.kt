@@ -26,10 +26,10 @@ class MainActivity : AppCompatActivity() {
             when(action){
                 BluetoothDevice.ACTION_FOUND -> {
                     var device: BluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+                    var superDevice = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE)
                     val deviceName = device.name
                     val deviceAddress = device.address
-
-                    Log.d("FOUND",deviceName + " " + deviceAddress)
+                    Log.d("FOUND",deviceName + " " + deviceAddress + " " + superDevice)
                 }
                 BluetoothAdapter.ACTION_DISCOVERY_STARTED -> Log.d("STARTED", " ")
                 BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> Log.d("FINISHED", " ")
