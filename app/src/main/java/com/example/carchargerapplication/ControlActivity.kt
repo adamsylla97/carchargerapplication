@@ -33,11 +33,15 @@ class ControlActivity: AppCompatActivity() {
         //call inner class
         ConnectToDevice(this).execute()
 
+        //setup buttons
         sendButton.setOnClickListener{
             sendCommand("a")
         }
         disconnectButton.setOnClickListener {
             disconnect()
+        }
+        getDataButton.setOnClickListener{
+            getData()
         }
     }
 
@@ -46,6 +50,18 @@ class ControlActivity: AppCompatActivity() {
             try {
                 m_bluetoothSocket!!.outputStream.write(input.toByteArray())
             } catch (e: IOException){
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun getData(){
+        var data: Int
+        if(m_bluetoothSocket != null){
+            try{
+                data = m_bluetoothSocket!!.inputStream.read()
+                Log.i("Data readed",""+data)
+            }catch (e: IOException){
                 e.printStackTrace()
             }
         }
