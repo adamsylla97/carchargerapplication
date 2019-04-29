@@ -100,8 +100,10 @@ class ControlActivity: AppCompatActivity() {
             super.onPostExecute(result)
             if(!connectSuccess){
                 Log.i("data","couldn't connect")
+                finish()
             } else {
                 m_isConnected = true
+                Log.i("isConnected",""+ m_isConnected)
             }
             m_progress.dismiss()
         }

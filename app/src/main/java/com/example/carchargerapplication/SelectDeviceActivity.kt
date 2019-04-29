@@ -24,8 +24,8 @@ class SelectDeviceActivity : AppCompatActivity() {
         val EXTRA_ADDRESS: String = "Device_address"
     }
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.select_device_layout)
 
         m_bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
@@ -51,6 +51,7 @@ class SelectDeviceActivity : AppCompatActivity() {
             for(device: BluetoothDevice in m_pairedDevies){
                 list.add(device)
                 Log.i("device",""+device)
+                Log.i("device name",""+device.name)
             }
         } else {
             toast("no paired bluetooth devices found")
