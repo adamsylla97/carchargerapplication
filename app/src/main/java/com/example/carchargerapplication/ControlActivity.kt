@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import kotlinx.android.synthetic.main.control_layout.*
+import java.io.BufferedReader
 import java.io.IOException
 import java.lang.Exception
 import java.util.*
@@ -56,11 +57,11 @@ class ControlActivity: AppCompatActivity() {
     }
 
     private fun getData(){
-        var data: Int
+        var data: BufferedReader
         if(m_bluetoothSocket != null){
             try{
-                data = m_bluetoothSocket!!.inputStream.read()
-                Log.i("Data readed",""+data)
+                data = m_bluetoothSocket!!.inputStream.bufferedReader(Charsets.US_ASCII)
+                Log.i("data",data.readLine())
             }catch (e: IOException){
                 e.printStackTrace()
             }
