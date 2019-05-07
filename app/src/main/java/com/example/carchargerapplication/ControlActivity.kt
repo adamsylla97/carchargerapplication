@@ -36,7 +36,8 @@ class ControlActivity: AppCompatActivity() {
 
         //setup buttons
         sendButton.setOnClickListener{
-            sendCommand("a")
+            sendCommand("b")
+            Log.i("send data", "b")
         }
         disconnectButton.setOnClickListener {
             disconnect()
@@ -118,10 +119,7 @@ class ControlActivity: AppCompatActivity() {
             if(!connectSuccess){
                 Log.i("data","couldn't connect")
                 finish()
-            } else {
-                m_isConnected = true
-                Log.i("isConnected",""+ m_isConnected)
-            }
+            } else
             m_progress.dismiss()
         }
 
