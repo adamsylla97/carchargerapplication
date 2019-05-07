@@ -37,8 +37,6 @@ class ControlActivity: AppCompatActivity() {
         setContentView(R.layout.control_layout)
         m_adress = intent.getStringExtra(SelectDeviceActivity.EXTRA_ADDRESS)
 
-        progressBarBatteryLevel.progress = 50
-
         //call inner class
         ConnectToDevice(this).execute()
 
@@ -54,8 +52,9 @@ class ControlActivity: AppCompatActivity() {
             getData()
         }
 
-        myThread.go()
-        myThread.wait = false
+        //progressBar.progress = 50
+        //progressBar.setProgress(100,true)
+
     }
 
     private fun sendCommand(input: String){
@@ -149,8 +148,11 @@ class ControlActivity: AppCompatActivity() {
             if(!connectSuccess){
                 Log.i("data","couldn't connect")
                 finish()
-            } else
-            m_progress.dismiss()
+            } else {
+                m_progress.dismiss()
+                myThread.go(this@ControlActivity)
+                myThread.wait = false
+            }
         }
 
     }
