@@ -6,9 +6,11 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.content.Context
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.widget.ProgressBar
 import kotlinx.android.synthetic.main.control_layout.*
 import java.io.BufferedReader
 import java.io.IOException
@@ -26,10 +28,16 @@ class ControlActivity: AppCompatActivity() {
         lateinit var m_adress: String
     }
 
+    var myThread = MyThread.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.control_layout)
         m_adress = intent.getStringExtra(SelectDeviceActivity.EXTRA_ADDRESS)
+
+        progressBarBatteryLevel.progress = 50
 
         //call inner class
         ConnectToDevice(this).execute()
@@ -45,12 +53,24 @@ class ControlActivity: AppCompatActivity() {
         getDataButton.setOnClickListener{
             getData()
         }
+
+        myThread.go()
+        myThread.wait = false
     }
 
     private fun sendCommand(input: String){
         if(m_bluetoothSocket != null){
             try {
                 m_bluetoothSocket!!.outputStream.write(input.toByteArray())
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    progressBarBatteryLevel.setProgress(progressBarBatteryLevel.progress - 10, true)
+                }else{
+                    progressBarBatteryLevel.progress -= 10
+                }
+
+                textViewBatteryLevel.text = progressBarBatteryLevel.progress.toString() + "%"
+
             } catch (e: IOException){
                 e.printStackTrace()
             }
@@ -63,6 +83,15 @@ class ControlActivity: AppCompatActivity() {
             try{
                 data = m_bluetoothSocket!!.inputStream.bufferedReader(Charsets.US_ASCII)
                 Log.i("data",data.readLine())
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    progressBarBatteryLevel.setProgress(progressBarBatteryLevel.progress + 10, true)
+                }else{
+                    progressBarBatteryLevel.progress += 10
+                }
+
+                textViewBatteryLevel.text = progressBarBatteryLevel.progress.toString() + "%"
+
             }catch (e: IOException){
                 e.printStackTrace()
             }
@@ -75,6 +104,7 @@ class ControlActivity: AppCompatActivity() {
                 m_bluetoothSocket!!.close()
                 m_bluetoothSocket = null
                 m_isConnected = false
+                myThread.wait = true
             } catch (e: IOException){
                 e.printStackTrace()
             }
