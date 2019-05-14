@@ -10,11 +10,9 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.widget.ProgressBar
 import kotlinx.android.synthetic.main.control_layout.*
 import java.io.BufferedReader
 import java.io.IOException
-import java.lang.Exception
 import java.util.*
 
 class ControlActivity: AppCompatActivity() {
@@ -42,8 +40,8 @@ class ControlActivity: AppCompatActivity() {
 
         //setup buttons
         sendButton.setOnClickListener{
-            sendCommand("b")
-            Log.i("send data", "b")
+            sendCommand("2")
+            Log.i("send data", "2")
         }
         disconnectButton.setOnClickListener {
             disconnect()
@@ -51,9 +49,6 @@ class ControlActivity: AppCompatActivity() {
         getDataButton.setOnClickListener{
             getData()
         }
-
-        //progressBar.progress = 50
-        //progressBar.setProgress(100,true)
 
     }
 
@@ -68,30 +63,9 @@ class ControlActivity: AppCompatActivity() {
                     progressBarBatteryLevel.progress -= 10
                 }
 
-                textViewBatteryLevel.text = progressBarBatteryLevel.progress.toString() + "%"
+                batteryTextView.text = progressBarBatteryLevel.progress.toString() + "%"
 
             } catch (e: IOException){
-                e.printStackTrace()
-            }
-        }
-    }
-
-    private fun getData(){
-        var data: BufferedReader
-        if(m_bluetoothSocket != null){
-            try{
-                data = m_bluetoothSocket!!.inputStream.bufferedReader(Charsets.US_ASCII)
-                Log.i("data",data.readLine())
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    progressBarBatteryLevel.setProgress(progressBarBatteryLevel.progress + 10, true)
-                }else{
-                    progressBarBatteryLevel.progress += 10
-                }
-
-                textViewBatteryLevel.text = progressBarBatteryLevel.progress.toString() + "%"
-
-            }catch (e: IOException){
                 e.printStackTrace()
             }
         }
@@ -108,6 +82,32 @@ class ControlActivity: AppCompatActivity() {
                 e.printStackTrace()
             }
             finish()
+        }
+    }
+
+    fun getData(){
+        var data: BufferedReader
+        if(m_bluetoothSocket != null){
+            try{
+                data = m_bluetoothSocket!!.inputStream.bufferedReader(Charsets.US_ASCII)
+                Log.i("data","1")
+                var temp: String = data.readLine()
+                if(temp.length > 0){
+                    Log.i("data","2")
+                    Log.i("data",temp)
+                    Log.i("data","3")
+                } else {
+                    Log.i("data","4")
+                    Log.i("data","pusto")
+                    Log.i("data","5")
+                }
+                Log.i("data","6")
+                Log.i("data","7")
+            }catch (e: IOException){
+                e.printStackTrace()
+            }catch (e: Exception){
+                e.printStackTrace()
+            }
         }
     }
 
@@ -150,7 +150,7 @@ class ControlActivity: AppCompatActivity() {
                 finish()
             } else {
                 m_progress.dismiss()
-                myThread.go(this@ControlActivity)
+                myThread.go(this@ControlActivity,this.context)
                 myThread.wait = false
             }
         }

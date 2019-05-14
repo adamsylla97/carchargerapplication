@@ -4,6 +4,7 @@ import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
@@ -11,8 +12,11 @@ import android.util.Log
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import kotlinx.android.synthetic.main.control_layout.*
 import kotlinx.android.synthetic.main.select_device_layout.*
 import org.jetbrains.anko.toast
+import java.io.BufferedReader
+import java.io.IOException
 
 class SelectDeviceActivity : AppCompatActivity() {
 
