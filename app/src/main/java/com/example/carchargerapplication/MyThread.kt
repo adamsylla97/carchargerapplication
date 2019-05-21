@@ -71,6 +71,7 @@ class MyThread : Thread() {
             try {
 
                 if(input == 105.toByte()){
+                    myActivity.batteryLevel.isCharging = false
                     sleep(3000)
                 }
 
@@ -159,8 +160,8 @@ class MyThread : Thread() {
                         i ++
 
                     Log.i("data i " ,i.toString())
-
-                    sendCommand(i.toByte())
+                    if(i%5 == 0)
+                        sendCommand(i.toByte())
 
                     if(i%10 == 0){
                         var data: String = getData().toString()
@@ -179,7 +180,7 @@ class MyThread : Thread() {
 
                     myActivity.runOnUiThread(Runnable {
 
-                        myActivity.batteryLevel.isCharging = true
+                        //myActivity.batteryLevel.isCharging = true
                         myActivity.batteryLevel.chargeLevel = i
                         if(i == 100 || canLoad == false){
                             Log.i("battery","jestem tutaj xd")
@@ -219,8 +220,9 @@ class MyThread : Thread() {
         with(myActivity.batteryLevel){
             chargeLevel = 0
             criticalChargeLevel = 15
-            color = Color.rgb(0,150,45)
-            isCharging = false
+            myActivity.batteryLevel.isCharging = true
+            color = Color.rgb(76,175,80)
+
         }
 
         vibe = myActivity.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator

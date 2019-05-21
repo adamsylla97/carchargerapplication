@@ -94,6 +94,7 @@ class ControlActivity: AppCompatActivity() {
         if(m_bluetoothSocket != null){
             try{
                 myThread.wait = true
+                myThread.sendCommand(myThread.myActivity.batteryLevel.chargeLevel!!.toByte())
                 myThread.sendCommand(105.toByte())
             } catch (e: IOException){
                 e.printStackTrace()
@@ -105,6 +106,8 @@ class ControlActivity: AppCompatActivity() {
         if(m_bluetoothSocket != null){
             try{
                 myThread.wait = false
+                myThread.myActivity.batteryLevel.isCharging = true
+                myThread.checkIfCanLoad()
             } catch (e: IOException){
                 e.printStackTrace()
             }
