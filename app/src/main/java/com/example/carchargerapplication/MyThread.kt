@@ -10,21 +10,29 @@ import kotlinx.android.synthetic.main.control_layout.*
 import java.io.BufferedReader
 import java.io.IOException
 import android.content.Context.VIBRATOR_SERVICE
+import android.graphics.Color
 import android.support.v4.content.ContextCompat.getSystemService
 import android.os.Vibrator
+import android.support.v4.app.NotificationCompat
 import android.support.v4.content.ContextCompat.getSystemService
 import com.google.gson.Gson
+import kotlinx.android.synthetic.main.control_layout.*
 
 
 class MyThread : Thread() {
 
     private var i : Int = 0
     var wait: Boolean = false
-    lateinit var  progressBarBatteryLevel: ProgressBar
-    lateinit var batteryLevelTextView: TextView
+//    lateinit var  progressBarBatteryLevel: ProgressBar
+//    lateinit var batteryLevelTextView: TextView
     lateinit var myActivity: Activity
     lateinit var myContext: Context
     lateinit var vibe: Vibrator
+
+//    var builder = NotificationCompat.Builder(myContext)
+//        .setContentTitle("temp")
+//        .setContentText("alalalala")
+//        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
     companion object{
         private var myThread: MyThread? = null
@@ -39,10 +47,12 @@ class MyThread : Thread() {
         }
     }
 
-    private fun sendCommand(input: String){
+    private fun sendCommand(input: Byte){
         if(ControlActivity.m_bluetoothSocket != null){
             try {
-                ControlActivity.m_bluetoothSocket!!.outputStream.write(input.toByteArray())
+                val byteArray: ByteArray = ByteArray(1)
+                byteArray.set(0, input)
+                ControlActivity.m_bluetoothSocket!!.outputStream.write(byteArray)
 
                 Log.i("data 123 123","sended " + input)
 
@@ -52,7 +62,7 @@ class MyThread : Thread() {
         }
     }
 
-    fun getData(){
+    fun getData(): String{
         var data: BufferedReader
         if(ControlActivity.m_bluetoothSocket != null){
             try{
@@ -62,7 +72,9 @@ class MyThread : Thread() {
                 if(temp.length > 0){
 
                     Log.i("data get data",temp)
-                    processJson(temp)
+
+                    //processJson(temp)
+                    return temp
 
                 } else {
 
@@ -75,50 +87,58 @@ class MyThread : Thread() {
                 e.printStackTrace()
             }
         }
+        return "";
+    }
+
+    fun checkIfCanLoad(): Boolean{
+        sendCommand(102.toByte())
+        //send tag
+        sendCommand(104.toByte())
+        var data = getData()
+        Log.i("ladowanie",data)
+        //"dataShape":{"fieldDefinitions"{"result":{"name":"result","desption":"","baseType":"NUMBER"ordinal":0,"aspects":{}}}},"ro":[{"result":1.0}]}
+        var result = data.split(":")
+        Log.i("result",result[9])
+        if(result[9].toCharArray()[0]=='1'){
+            return true
+        } else {
+            return false
+        }
     }
 
     override fun run() {
+
+        var canLoad = false
+
         //var controlActivity: ControlActivity = ControlActivity()
-        while(true) {
-            if(!wait) {
-                sleep(1000)
-                //controlActivity.getData()
-                if (i < 100)
-                    i ++
+        if(checkIfCanLoad()){
+            canLoad = true
+            while(canLoad) {
+                if(!wait) {
+                    sleep(1000)
 
-                Log.i("data i " ,i.toString())
 
-                if(i == 10){
-                    sendCommand("2")
+                    if (i < 100)
+                        i ++
+
+                    Log.i("data i " ,i.toString())
+
+                    sendCommand(i.toByte())
+
+//                    var data: String = getData().toString()
+//
+//                    Log.i("getdata",data)
+
+                    if(i == 100){
+                        vibe.vibrate(3000)
+                    }
+
+                    myActivity.runOnUiThread(Runnable {
+
+                        myActivity.batteryLevel.chargeLevel = i
+
+                    })
                 }
-
-                if(i == 15){
-                    getData()
-                }
-
-                if(i == 20){
-                    sendCommand("2")
-                }
-
-                if(i == 25){
-                    getData()
-                }
-
-                if(i == 100){
-                    vibe.vibrate(3000)
-                }
-
-                myActivity.runOnUiThread(Runnable {
-
-                        Log.i("battery level thread",progressBarBatteryLevel.progress.toString())
-                        progressBarBatteryLevel.setProgress(i,true)
-                        batteryLevelTextView.text = i.toString();
-
-                        if(i >= 100){
-                            batteryLevelTextView.text = "Naładowane"
-                        }
-
-                })
             }
         }
     }
@@ -140,8 +160,14 @@ class MyThread : Thread() {
     fun go(activity: Activity, context: Context){
         myActivity = activity
         myContext = context
-        progressBarBatteryLevel = activity.findViewById(R.id.progressBarBatteryLevel)
-        batteryLevelTextView = activity.findViewById(R.id.batteryTextView)
+        //progressBarBatteryLevel = activity.findViewById(R.id.progressBarBatteryLevel)
+        //batteryLevelTextView = activity.findViewById(R.id.batteryTextView)
+        with(myActivity.batteryLevel){
+            chargeLevel = 0
+            criticalChargeLevel = 15
+            color = Color.GREEN
+            isCharging = false
+        }
         vibe = myActivity.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         if(!isAlive)
             myThread!!.start()

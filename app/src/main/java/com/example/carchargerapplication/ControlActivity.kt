@@ -57,13 +57,13 @@ class ControlActivity: AppCompatActivity() {
             try {
                 m_bluetoothSocket!!.outputStream.write(input.toByteArray())
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    progressBarBatteryLevel.setProgress(progressBarBatteryLevel.progress - 10, true)
-                }else{
-                    progressBarBatteryLevel.progress -= 10
-                }
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                    progressBarBatteryLevel.setProgress(progressBarBatteryLevel.progress - 10, true)
+//                }else{
+//                    progressBarBatteryLevel.progress -= 10
+//                }
 
-                batteryTextView.text = progressBarBatteryLevel.progress.toString() + "%"
+                //batteryTextView.text = progressBarBatteryLevel.progress.toString() + "%"
 
             } catch (e: IOException){
                 e.printStackTrace()

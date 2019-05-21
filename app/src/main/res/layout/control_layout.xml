@@ -25,34 +25,51 @@
             android:layout_marginTop="36dp" android:layout_marginStart="8dp"
             app:layout_constraintStart_toEndOf="@+id/sendButton"
             app:layout_constraintEnd_toStartOf="@+id/disconnectButton" android:layout_marginEnd="8dp"/>
-    <ProgressBar
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:id="@+id/progressBarBatteryLevel"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/getDataButton"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintVertical_bias="0.0"
-            android:max="100"
-            android:progress="50"
-            android:progressDrawable="@drawable/circle"
-    />
-    <TextView
-            android:text="betteryLevelTextView"
-            android:layout_width="218dp"
-            android:layout_height="95dp"
-            android:id="@+id/batteryTextView" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="@+id/progressBarBatteryLevel"
-            android:gravity="center" android:textStyle="bold" android:textSize="45sp" tools:text="0%"/>
+    <!--<ProgressBar-->
+            <!--style="@style/Widget.AppCompat.ProgressBar.Horizontal"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:id="@+id/progressBarBatteryLevel"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/getDataButton"-->
+            <!--app:layout_constraintHorizontal_bias="0.0"-->
+            <!--app:layout_constraintVertical_bias="0.0"-->
+            <!--android:max="100"-->
+            <!--android:progress="50"-->
+            <!--android:progressDrawable="@drawable/circle"-->
+    <!--/>-->
+    <!--<TextView-->
+            <!--android:text="betteryLevelTextView"-->
+            <!--android:layout_width="218dp"-->
+            <!--android:layout_height="95dp"-->
+            <!--android:id="@+id/batteryTextView" app:layout_constraintEnd_toEndOf="parent"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"-->
+            <!--android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="@+id/progressBarBatteryLevel"-->
+            <!--android:gravity="center" android:textStyle="bold" android:textSize="45sp" tools:text="0%"/>-->
+
+    <eo.view.batterymeter.BatteryMeterView
+            android:layout_width="421dp"
+            android:layout_height="530dp"
+            app:batteryMeterChargeLevel="80"
+            app:batteryMeterChargingColor="#4caf50"
+            app:batteryMeterColor="#0277bd"
+            app:batteryMeterCriticalChargeLevel="15"
+            app:batteryMeterCriticalColor="#d84315"
+            app:batteryMeterIndicatorColor="@android:color/transparent"
+            app:batteryMeterIsCharging="true"
+            app:batteryMeterTheme="rounded"
+            app:batteryMeterUnknownColor="#e0e0e0"
+            app:layout_constraintStart_toStartOf="parent" android:id="@+id/batteryLevel"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginBottom="70dp"
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"/>
 
 </android.support.constraint.ConstraintLayout>
