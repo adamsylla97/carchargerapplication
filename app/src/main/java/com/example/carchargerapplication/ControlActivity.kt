@@ -1,15 +1,16 @@
 package com.example.carchargerapplication
 
+import android.app.Activity
 import android.app.ProgressDialog
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.content.Context
 import android.os.AsyncTask
-import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.widget.Button
 import kotlinx.android.synthetic.main.control_layout.*
 import java.io.BufferedReader
 import java.io.IOException
@@ -24,6 +25,8 @@ class ControlActivity: AppCompatActivity() {
         lateinit var m_bluetoothAdapter: BluetoothAdapter
         var m_isConnected: Boolean = false
         lateinit var m_adress: String
+        lateinit var myActivity: Activity
+        lateinit var myContext: Context
     }
 
     var myThread = MyThread.getInstance()
@@ -37,17 +40,19 @@ class ControlActivity: AppCompatActivity() {
 
         //call inner class
         ConnectToDevice(this).execute()
-
-        //setup buttons
-        sendButton.setOnClickListener{
-            sendCommand("2")
-            Log.i("send data", "2")
-        }
         disconnectButton.setOnClickListener {
             disconnect()
         }
-        getDataButton.setOnClickListener{
-            getData()
+
+        var stopButton: Button = findViewById(R.id.stopDataButton)
+        var startButton: Button = findViewById(R.id.startButton)
+
+        stopButton.setOnClickListener {
+            stop()
+        }
+
+        startButton.setOnClickListener {
+            start()
         }
 
     }
@@ -82,6 +87,27 @@ class ControlActivity: AppCompatActivity() {
                 e.printStackTrace()
             }
             finish()
+        }
+    }
+
+    private fun stop(){
+        if(m_bluetoothSocket != null){
+            try{
+                myThread.wait = true
+                myThread.sendCommand(105.toByte())
+            } catch (e: IOException){
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun start(){
+        if(m_bluetoothSocket != null){
+            try{
+                myThread.wait = false
+            } catch (e: IOException){
+                e.printStackTrace()
+            }
         }
     }
 
@@ -150,7 +176,9 @@ class ControlActivity: AppCompatActivity() {
                 finish()
             } else {
                 m_progress.dismiss()
-                myThread.go(this@ControlActivity,this.context)
+                myActivity = this@ControlActivity
+                myContext = this.context
+                myThread.go(myActivity, myContext)
                 myThread.wait = false
             }
         }
