@@ -6,23 +6,14 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import android.util.Log
-import android.widget.ProgressBar
-import android.widget.TextView
 import kotlinx.android.synthetic.main.control_layout.*
 import java.io.BufferedReader
 import java.io.IOException
-import android.content.Context.VIBRATOR_SERVICE
 import android.graphics.Color
-import android.support.v4.content.ContextCompat.getSystemService
 import android.os.Vibrator
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
-import android.support.v4.content.ContextCompat.getSystemService
 import android.widget.Button
-import com.google.gson.Gson
-import kotlinx.android.synthetic.main.control_layout.*
-import org.jetbrains.anko.find
-
 
 class MyThread : Thread() {
 
@@ -117,11 +108,9 @@ class MyThread : Thread() {
 
     fun checkIfCanLoad(): Boolean{
         sendCommand(102.toByte())
-        //send tag
         sendCommand(104.toByte())
         var data = getData()
         Log.i("ladowanie",data)
-        //"dataShape":{"fieldDefinitions"{"result":{"name":"result","desption":"","baseType":"NUMBER"ordinal":0,"aspects":{}}}},"ro":[{"result":1.0}]}
         var result = data.split(":")
         Log.i("result",result[9])
         if(result[9].toCharArray()[0]=='1'){
@@ -230,7 +219,7 @@ class MyThread : Thread() {
         builder = NotificationCompat.Builder(myContext,"id")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Car charger application")
-            .setContentText("Zakończono ładowanie")
+            .setContentText("Charging is finished")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
         createNotificationChannel()
