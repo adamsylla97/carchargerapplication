@@ -40,9 +40,6 @@ class ControlActivity: AppCompatActivity() {
 
         //call inner class
         ConnectToDevice(this).execute()
-        disconnectButton.setOnClickListener {
-            disconnect()
-        }
 
         var stopButton: Button = findViewById(R.id.stopDataButton)
         var startButton: Button = findViewById(R.id.startButton)
@@ -62,31 +59,9 @@ class ControlActivity: AppCompatActivity() {
             try {
                 m_bluetoothSocket!!.outputStream.write(input.toByteArray())
 
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                    progressBarBatteryLevel.setProgress(progressBarBatteryLevel.progress - 10, true)
-//                }else{
-//                    progressBarBatteryLevel.progress -= 10
-//                }
-
-                //batteryTextView.text = progressBarBatteryLevel.progress.toString() + "%"
-
             } catch (e: IOException){
                 e.printStackTrace()
             }
-        }
-    }
-
-    private fun disconnect(){
-        if(m_bluetoothSocket != null){
-            try{
-                m_bluetoothSocket!!.close()
-                m_bluetoothSocket = null
-                m_isConnected = false
-                myThread.wait = true
-            } catch (e: IOException){
-                e.printStackTrace()
-            }
-            finish()
         }
     }
 
@@ -119,19 +94,14 @@ class ControlActivity: AppCompatActivity() {
         if(m_bluetoothSocket != null){
             try{
                 data = m_bluetoothSocket!!.inputStream.bufferedReader(Charsets.US_ASCII)
-                Log.i("data","1")
                 var temp: String = data.readLine()
                 if(temp.length > 0){
-                    Log.i("data","2")
                     Log.i("data",temp)
-                    Log.i("data","3")
                 } else {
                     Log.i("data","4")
                     Log.i("data","pusto")
                     Log.i("data","5")
                 }
-                Log.i("data","6")
-                Log.i("data","7")
             }catch (e: IOException){
                 e.printStackTrace()
             }catch (e: Exception){

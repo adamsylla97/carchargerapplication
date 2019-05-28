@@ -63,7 +63,7 @@ class MyThread : Thread() {
 
                 if(input == 105.toByte()){
                     myActivity.batteryLevel.isCharging = false
-                    sleep(3000)
+                    sleep(10000)
                 }
 
                 val byteArray: ByteArray = ByteArray(1)
@@ -149,7 +149,7 @@ class MyThread : Thread() {
                         i ++
 
                     Log.i("data i " ,i.toString())
-                    if(i%5 == 0)
+                    if(i%10 == 0)
                         sendCommand(i.toByte())
 
                     if(i%10 == 0){
@@ -172,7 +172,6 @@ class MyThread : Thread() {
                         //myActivity.batteryLevel.isCharging = true
                         myActivity.batteryLevel.chargeLevel = i
                         if(i == 100 || canLoad == false){
-                            Log.i("battery","jestem tutaj xd")
                             myActivity.batteryLevel.isCharging = false
 
                             with(NotificationManagerCompat.from(myActivity)){
